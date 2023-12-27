@@ -7,7 +7,47 @@
     <title>Document</title>
 </head>
 <body>
-    
+    <div class='summary'>
+        <h2>budżet domowy</h2>
+        <p>do wykorzystania pozostało jeszcze: </p>
+        <p class="pozostalo">tutaj ilosc zl</p>
+      </div>
+      <div class='main'>
+        <div class='left'>
+          <h2>przychody</h2>
+          <input id="przychodNazwaPole" type='text' placeholder='nazwa przychodu'></input>
+        <input type='number' placeholder='kwota'></input>
+      <button id='dodajPrzychod'>Dodaj</button>
+        <hr/>
+      <ul>
+        <li>
+          wypłata <button>edytuj</button> <button>usuń</button>
+        </li>
+        <li></li>
+        <li></li>
+      </ul>
+      <hr/>
+      <div>
+        <p class='suma'>suma przychodów: </p>
+      </div>
+        </div>
+        <div class='right'>
+          <h2>wydatki</h2>
+          <input type='text' placeholder='nazwa przychodu'></input>
+        <input type='number' placeholder='kwota'></input>
+        <button id='dodajWydatek'>Dodaj</button>
+        <hr/>
+    <ul>
+        <li></li>
+        <li></li>
+        <li></li>
+      </ul>
+    <hr/>
+      <div>
+        <p class='suma'>suma wydatków: </p>
+      </div>
+        </div>
+      </div>
     <script src="index.js"></script>
 </body>
 </html>
