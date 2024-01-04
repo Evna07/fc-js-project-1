@@ -7,19 +7,23 @@
     <title>Document</title>
 </head>
 <body>
-    <div class='summary'>
+    <div class="sumMain">
+      <div class='summary'>
         <h2>budżet domowy</h2>
         <p>do wykorzystania pozostało jeszcze: </p>
         <p class="pozostalo">tutaj ilosc zl</p>
       </div>
+    </div>
       <div class='main'>
         <div class='left'>
           <h2>przychody</h2>
-          <input id="przychodNazwaPole" type='text' placeholder='nazwa przychodu'></input>
-        <input type='number' placeholder='kwota'></input>
-      <button id='dodajPrzychod'>Dodaj</button>
+          <fieldset>
+            <input class="przychodNazwaPole" id="przychodNazwaPole" type='text' placeholder='nazwa przychodu' required></input>
+            <input class='przychodKwotaPole' type='number' placeholder='kwota' required min="0"></input>
+            <button id='dodajPrzychod'>Dodaj</button>
+          </fieldset>
         <hr/>
-      <ul>
+      <ul class="lista">
         <li>
           wypłata <button>edytuj</button> <button>usuń</button>
         </li>
@@ -27,24 +31,26 @@
         <li></li>
       </ul>
       <hr/>
-      <div>
-        <p class='suma'>suma przychodów: </p>
+      <div class='suma'>
+        <p>suma przychodów: </p>
       </div>
         </div>
         <div class='right'>
           <h2>wydatki</h2>
-          <input type='text' placeholder='nazwa przychodu'></input>
-        <input type='number' placeholder='kwota'></input>
-        <button id='dodajWydatek'>Dodaj</button>
+          <fieldset>
+            <input class="wydatekNazwaPole" id="wydatekNazwaPole" type='text' placeholder='nazwa wydatku' required></input>
+            <input class="wydatekKwotaPole" type='number' placeholder='kwota' required min="0"></input>
+            <button id='dodajWydatek'>Dodaj</button>
+          </fieldset>
         <hr/>
-    <ul>
+    <ul class="lista">
         <li></li>
         <li></li>
         <li></li>
       </ul>
     <hr/>
-      <div>
-        <p class='suma'>suma wydatków: </p>
+      <div class='suma'>
+        <p>suma wydatków: </p>
       </div>
         </div>
       </div>
