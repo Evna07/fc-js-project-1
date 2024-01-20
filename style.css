@@ -1,226 +1,89 @@
-body {
-  width: 100%;
-  background-color: silver;
-  background-image: radial-gradient(
-      circle at 100% 150%,
-      silver 24%,
-      white 24%,
-      white 28%,
-      silver 28%,
-      silver 36%,
-      white 36%,
-      white 40%,
-      transparent 40%,
-      transparent
-    ),
-    radial-gradient(
-      circle at 0 150%,
-      silver 24%,
-      white 24%,
-      white 28%,
-      silver 28%,
-      silver 36%,
-      white 36%,
-      white 40%,
-      transparent 40%,
-      transparent
-    ),
-    radial-gradient(
-      circle at 50% 100%,
-      white 10%,
-      silver 10%,
-      silver 23%,
-      white 23%,
-      white 30%,
-      silver 30%,
-      silver 43%,
-      white 43%,
-      white 50%,
-      silver 50%,
-      silver 63%,
-      white 63%,
-      white 71%,
-      transparent 71%,
-      transparent
-    ),
-    radial-gradient(
-      circle at 100% 50%,
-      white 5%,
-      silver 5%,
-      silver 15%,
-      white 15%,
-      white 20%,
-      silver 20%,
-      silver 29%,
-      white 29%,
-      white 34%,
-      silver 34%,
-      silver 44%,
-      white 44%,
-      white 49%,
-      transparent 49%,
-      transparent
-    ),
-    radial-gradient(
-      circle at 0 50%,
-      white 5%,
-      silver 5%,
-      silver 15%,
-      white 15%,
-      white 20%,
-      silver 20%,
-      silver 29%,
-      white 29%,
-      white 34%,
-      silver 34%,
-      silver 44%,
-      white 44%,
-      white 49%,
-      transparent 49%,
-      transparent
-    );
-  background-size: 100px 50px;
-  font-family: system-ui;
+* {
+  padding: 0;
+  margin: 0;
 }
 
-hr {
-  border: 1px solid #787878;
-  margin: 10px 10px;
+.wrapper {
+  font-family: Arial, sans-serif;
+  background-color: #faf2f5;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  height: 100%;
 }
 
-input {
-  width: 30%;
-  min-width: 60px;
-  margin-left: 8px;
-}
-
-.summary h2 {
-  margin-top: 5px;
-  margin-bottom: -15px;
-  font-size: 1.7em;
-  text-align: center;
-  text-transform: uppercase;
-  color: #333;
+.main {
+  width: 300px;
+  background-color: #eed2cc;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-sizing: content-box;
 }
 
 h2 {
-  font-size: 1.7em;
-  text-transform: uppercase;
-  font-family: system-ui;
-  color: #333;
+  margin-bottom: 10px;
 }
 
-p {
-  text-align: center;
-  font-family: system-ui;
-  color: #333;
-  margin-bottom: -10px;
+ul {
+  list-style: none;
+  padding: 0;
 }
 
-.sumMain {
-  width: 90%;
-  height: 120px;
-  margin-left: auto;
-  margin-right: auto;
-  overflow: auto;
-  min-width: 620px;
-}
-
-.summary {
-  height: 100px;
-  width: 35%;
-  margin: 10px auto;
-  background-color: rgba(255, 255, 255, 0.8);
-  box-shadow: 5px 0px 20px rgba(51, 51, 51, 0.3);
-  overflow: hidden;
-  border-radius: 5px;
-  min-width: 300px;
-}
-/*summary tez powinno miec swojego maina zeby zachowywalo sie tak samo, jak left i right*/
-/*pokombinowac z wartosciami margin i width dla left i right zeby dobrze wygladalo*/
-.main {
-  width: 90%;
-  height: 90vh;
-  margin-left: auto;
-  margin-right: auto;
-  overflow: auto;
-  min-width: 620px;
-}
-
-.left {
-  float: left;
-  margin-left: 5%;
-}
-
-.right {
-  float: right;
-  margin-right: 5%;
-}
-
-.left h2,
-.right h2 {
-  text-align: center;
-}
-
-.left,
-.right {
-  width: 44%;
-  height: 85%;
-  overflow: hidden;
-  background-color: rgba(255, 255, 255, 0.8);
-  box-shadow: 2px 0px 20px rgba(51, 51, 51, 0.3);
-  border-radius: 3px;
-  min-width: 250px;
+li {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
 }
 
-fieldset {
-  width: 90%;
-  margin: 0 auto;
-  display: flex;
-  border: 2px dashed #333;
+.income {
+  color: #2ecc71;
+  font-weight: bold;
 }
 
-.przychodNazwaPole,
-.wydatekNazwaPole {
-  min-width: 100px;
+.expense {
+  color: #e74c3c;
+  font-weight: bold;
 }
 
-.przychodKwotaPole,
-.wydatekKwotaPole {
-  margin-right: 5px;
+#balance {
+  font-weight: bold;
+}
+
+#balance.positive {
+  color: #2ecc71;
+}
+
+#balance.zero {
+  color: #e8998d;
+}
+
+#balance.negative {
+  color: #e74c3c;
+}
+
+.form-container {
+  margin: 20px auto;
+}
+
+input {
+  width: calc(100% - 10px);
+  padding: 5px;
+  margin: 5px auto;
 }
 
 button {
-  text-transform: uppercase;
-  background-color: #555;
-  color: #e6e5e3;
-  border: 1px;
-  box-shadow: 2px 3px 3px rgba(51, 51, 51, 0.4);
-  border-radius: 3px;
-  padding: 3px 5px;
+  background-color: #f28482;
+  color: #fff;
+  border: none;
+  padding: 8px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 10px 5px;
 }
 
-button:hover {
-  text-transform: uppercase;
-  background-color: #888;
-  color: #222;
-  border: 1px;
-  box-shadow: 2px 3px 3px rgba(51, 51, 51, 0.4);
-  border-radius: 3px;
-  padding: 3px 5px;
-}
-
-.pozostalo {
-  text-decoration: underline;
-}
-
-.lista {
-  border: 2px solid red;
-}
-
-.suma {
-  height: 50px;
-  border: 2px solid red;
+span {
+  margin-top: 15px;
 }
