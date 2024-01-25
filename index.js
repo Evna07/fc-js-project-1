@@ -93,8 +93,9 @@ addTransaction.addEventListener("click", function () {
 
           if (totalId !== -1) {
             total[totalId].description = newDescription;
-            total[totalId].value =
-              type.value === "income" ? Number(newAmount) : -Number(newAmount);
+            total[totalId].value = li.classList.contains("income")
+              ? Number(newAmount)
+              : -Number(newAmount);
           }
         } else {
           li.innerHTML = `<span>${currentDescription}</span> <span>${currentAmount} </span><span>PLN</span>`;
