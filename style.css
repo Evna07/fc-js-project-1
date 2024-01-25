@@ -16,7 +16,9 @@
 }
 
 .main {
-  width: 300px;
+  max-width: 450px;
+  width: fit-content;
+  min-width: 300px;
   background-color: #eed2cc;
   padding: 20px;
   border-radius: 10px;
@@ -49,6 +51,7 @@ li {
 }
 
 #balance {
+  margin-top: 10px;
   font-weight: bold;
 }
 
