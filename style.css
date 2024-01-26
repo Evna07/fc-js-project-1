@@ -5,7 +5,7 @@
 
 .wrapper {
   font-family: Arial, sans-serif;
-  background-color: aqua;
+  background-color: #faf2f5;
   margin: 0;
   padding: 0;
   display: flex;
@@ -19,7 +19,7 @@
   max-width: 450px;
   width: fit-content;
   min-width: 300px;
-  background-color: #eed2cc;
+  background-color: aqua;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
