@@ -38,11 +38,15 @@ function removeTransaction(id) {
 
 addTransaction.addEventListener("click", function () {
   const li = document.createElement("li");
-  li.innerHTML = `<span>${description.value} </span> <span>${amount.value} </span><span>PLN</span>`;
+  li.innerHTML = `<span>${description.value} </span> <span>${Math.abs(
+    amount.value
+  )} </span><span>PLN</span>`;
 
   if (description.value !== "" && amount.value !== "") {
     const transactionValue =
-      type.value === "income" ? Number(amount.value) : -Number(amount.value);
+      type.value === "income"
+        ? Number(Math.abs(amount.value))
+        : -Number(Math.abs(amount.value));
 
     if (type.value === "income") li.classList.add("income");
     else li.classList.add("expense");
