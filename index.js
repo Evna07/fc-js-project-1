@@ -40,7 +40,6 @@ const removeTransaction = (id) => {
   });
 };
 
-const acceptChange = () => {};
 //potrzebne ograniczenie, zeby najmniejsza mozliwa wartosc byla rowna 0.01.....
 
 addTransaction.addEventListener("click", function () {
@@ -75,6 +74,7 @@ addTransaction.addEventListener("click", function () {
       inputAmount.type = "text";
       inputAmount.value = currentAmount;
       inputAmount.placeholder = currentAmount;
+      inputAmount.setAttribute("type", "number");
 
       li.innerHTML = "";
       li.appendChild(inputDescription);
@@ -90,7 +90,7 @@ addTransaction.addEventListener("click", function () {
 
       buttonAccept.addEventListener("click", () => {
         const newDescription = inputDescription.value.trim();
-        const newAmount = inputAmount.value.trim();
+        const newAmount = Math.abs(Number(inputAmount.value.trim()).toFixed(2));
 
         if (newDescription !== "" && newAmount !== "") {
           li.innerHTML = `<span>${newDescription}</span> <span>${newAmount} </span><span>PLN</span>`;
@@ -102,8 +102,8 @@ addTransaction.addEventListener("click", function () {
           if (totalId !== -1) {
             total[totalId].description = newDescription;
             total[totalId].value = li.classList.contains("income")
-              ? Number(newAmount)
-              : -Number(newAmount);
+              ? newAmount
+              : -newAmount;
           }
         } else {
           li.innerHTML = `<span>${currentDescription}</span> <span>${currentAmount} </span><span>PLN</span>`;
