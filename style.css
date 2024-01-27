@@ -18,11 +18,11 @@
 }
 
 .main {
-  min-width: 500px;
+  min-width: 300px;
   background-color: #eed2cc;
-  padding: 20px;
+  padding: 10px;
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 1px 5px 14px -3px rgba(143, 146, 167, 1);
   box-sizing: content-box;
 }
 
@@ -34,8 +34,6 @@ h2 {
 ul {
   list-style: none;
   padding: 0;
-  border-top: 2px solid #33658a;
-  border-bottom: 2px solid #33658a;
 }
 
 li {
@@ -69,6 +67,7 @@ li {
 
 #balance.negative {
   color: #e63946;
+  text-decoration: underline;
 }
 
 .form-container {
@@ -81,6 +80,7 @@ input {
   margin: 5px auto;
   border: none;
   border-radius: 5px;
+  background-color: #faf2f5;
 }
 
 input:focus {
@@ -103,12 +103,13 @@ span {
   margin-top: 15px;
 }
 
-.stickyUp {
+.stickyTop {
   position: -webkit-sticky; /* Safari */
   position: sticky;
   top: 0;
   background-color: #eed2cc;
   padding: 20px;
+  border-bottom: 2px solid #33658a;
 }
 
 .stickyBottom {
@@ -117,16 +118,20 @@ span {
   bottom: 0;
   background-color: #eed2cc;
   padding: 20px;
+  border-top: 2px solid #33658a;
 }
 
 select {
   border: none;
   border-radius: 3px;
   padding: 1px;
+  background-color: #faf2f5;
+  padding: 5px;
+  margin: 2px;
 }
 
 select:focus {
-  padding: 0;
   border: 1px solid #33658a;
   outline: none;
+  margin: 1px;
 }

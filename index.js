@@ -9,7 +9,7 @@ let total = [];
 const balanceTotal = document.createElement("span");
 balance.appendChild(balanceTotal);
 
-function updateBalance() {
+const updateBalance = () => {
   const sumTotal = total.reduce((acc, val) => acc + val.value, 0);
   if (sumTotal > 0) {
     balanceTotal.innerHTML = `Możesz jeszcze wydać ${sumTotal.toFixed(
@@ -29,18 +29,20 @@ function updateBalance() {
     balance.classList.remove("positive", "zero");
   }
   console.log(total);
-}
+};
 
-function removeTransaction(id) {
+const removeTransaction = (id) => {
   total.forEach((item, index) => {
     if (item.id === id) {
       total.splice(index, 1);
       updateBalance();
     }
   });
-}
+};
+
+const acceptChange = () => {};
 //potrzebne ograniczenie, zeby najmniejsza mozliwa wartosc byla rowna 0.01.....
-//i zeby dla pustych pol pokazalo sie powiadomienie, ze nie moga byc puste.........
+
 addTransaction.addEventListener("click", function () {
   const li = document.createElement("li");
   li.innerHTML = `<span>${description.value}</span> <span>${Math.abs(
@@ -139,5 +141,9 @@ addTransaction.addEventListener("click", function () {
     total.push(transactionObject);
 
     updateBalance();
+  } else if (description.value === "" && amount.value !== "") {
+    description.setAttribute("placeholder", "Musisz wpisac nazwe");
+  } else if (description.value !== "" && amount.value === "") {
+    amount.setAttribute("placeholder", "Musisz wpisac kwote");
   }
 });
