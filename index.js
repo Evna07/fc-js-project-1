@@ -12,7 +12,9 @@ balance.appendChild(balanceTotal);
 function updateBalance() {
   const sumTotal = total.reduce((acc, val) => acc + val.value, 0);
   if (sumTotal > 0) {
-    balanceTotal.innerHTML = `Możesz jeszcze wydać ${sumTotal} złotych`;
+    balanceTotal.innerHTML = `Możesz jeszcze wydać ${sumTotal.toFixed(
+      2
+    )} złotych`;
     balance.classList.add("positive");
     balance.classList.remove("negative", "zero");
   } else if (sumTotal === 0) {
@@ -20,7 +22,9 @@ function updateBalance() {
     balance.classList.add("zero");
     balance.classList.remove("positive", "negative");
   } else {
-    balanceTotal.innerHTML = `Bilans jest ujemny. Jesteś na minusie ${-sumTotal} złotych`;
+    balanceTotal.innerHTML = `Bilans jest ujemny. Jesteś na minusie ${-sumTotal.toFixed(
+      2
+    )} złotych`;
     balance.classList.add("negative");
     balance.classList.remove("positive", "zero");
   }
@@ -35,18 +39,16 @@ function removeTransaction(id) {
     }
   });
 }
-
+//potrzebne ograniczenie, zeby najmniejsza mozliwa wartosc byla rowna 0.01.....
+//i zeby dla pustych pol pokazalo sie powiadomienie, ze nie moga byc puste.........
 addTransaction.addEventListener("click", function () {
   const li = document.createElement("li");
-  li.innerHTML = `<span>${description.value} </span> <span>${Math.abs(
+  li.innerHTML = `<span>${description.value}</span> <span>${Math.abs(
     amount.value
-  )} </span><span>PLN</span>`;
-
+  ).toFixed(2)} </span><span>PLN</span>`;
+  let value = Number(Math.abs(amount.value).toFixed(2));
   if (description.value !== "" && amount.value !== "") {
-    const transactionValue =
-      type.value === "income"
-        ? Number(Math.abs(amount.value))
-        : -Number(Math.abs(amount.value));
+    const transactionValue = type.value === "income" ? value : -value;
 
     if (type.value === "income") li.classList.add("income");
     else li.classList.add("expense");

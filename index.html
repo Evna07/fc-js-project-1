@@ -4,21 +4,30 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
+    <!-- importing font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@100..800&display=swap"
+      rel="stylesheet"
+    />
     <title>Minimalistic Home Budget App</title>
   </head>
   <body>
     <div class="wrapper">
       <div class="main">
-        <h2>Budżet Domowy</h2>
-        <div class="form-container">
-          <input type="text" id="description" placeholder="Nazwa" required />
-          <input
-            type="number"
-            id="amount"
-            placeholder="Kwota"
-            min="0"
-            required
-          />
+        <div class="stickyUp">
+          <h2>Budżet Domowy</h2>
+          <div class="form-container">
+            <input type="text" id="description" placeholder="Nazwa" required />
+            <input
+              type="number"
+              id="amount"
+              placeholder="Kwota"
+              min="0"
+              required
+            />
+          </div>
           <select id="type">
             <option value="income">Przychód</option>
             <option value="expense">Wydatek</option>
@@ -26,8 +35,7 @@
           <button id="addTransaction">Dodaj transakcję</button>
         </div>
         <ul id="transactionList"></ul>
-
-        <div id="balance"></div>
+        <div id="balance" class="stickyBottom"></div>
       </div>
     </div>
     <script src="index.js" type="module"></script>
