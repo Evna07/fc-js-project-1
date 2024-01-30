@@ -5,7 +5,7 @@
 
 .wrapper {
   color: #33658a;
-  font-family: Arial, sans-serif;
+  font-family: ("Playpen Sans", cursive), Arial, sans-serif;
   background-color: #faf2f5;
   margin: 0;
   padding: 0;
@@ -14,7 +14,6 @@
   justify-content: center;
   min-height: 100vh;
   height: 100%;
-  font-family: "Playpen Sans", cursive;
 }
 
 .main {

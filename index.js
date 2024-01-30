@@ -1,28 +1,38 @@
 import { nanoid } from "https://cdn.jsdelivr.net/npm/nanoid/nanoid.js";
+// Selecting DOM elements
 const addTransaction = document.querySelector("#addTransaction");
 const transactionList = document.querySelector("#transactionList");
 const description = document.querySelector("#description");
 const amount = document.querySelector("#amount");
 const type = document.querySelector("#type");
 const balance = document.querySelector("#balance");
-let total = [];
 const balanceTotal = document.createElement("span");
 balance.appendChild(balanceTotal);
 
+const form = document.querySelector("form");
+
+form.addEventListener("submit", (event) => {
+  event.preventDefault();
+});
+
+// Array to store transactions
+const total = [];
+
+// Updateing total balance
 const updateBalance = () => {
   const sumTotal = total.reduce((acc, val) => acc + val.value, 0);
   if (sumTotal > 0) {
-    balanceTotal.innerHTML = `Możesz jeszcze wydać ${sumTotal.toFixed(
+    balanceTotal.textContent = `Możesz jeszcze wydać ${sumTotal.toFixed(
       2
     )} złotych`;
     balance.classList.add("positive");
     balance.classList.remove("negative", "zero");
   } else if (sumTotal === 0) {
-    balanceTotal.innerHTML = `Bilans wynosi zero`;
+    balanceTotal.textContent = `Bilans wynosi zero`;
     balance.classList.add("zero");
     balance.classList.remove("positive", "negative");
   } else {
-    balanceTotal.innerHTML = `Bilans jest ujemny. Jesteś na minusie ${-sumTotal.toFixed(
+    balanceTotal.textContent = `Bilans jest ujemny. Jesteś na minusie ${-sumTotal.toFixed(
       2
     )} złotych`;
     balance.classList.add("negative");
@@ -31,23 +41,30 @@ const updateBalance = () => {
   console.log(total);
 };
 
+// Deleting transaction
 const removeTransaction = (id) => {
-  total.forEach((item, index) => {
-    if (item.id === id) {
-      total.splice(index, 1);
-      updateBalance();
-    }
-  });
+  const indexToRemove = total.findIndex((item) => item.id === id);
+  if (indexToRemove !== -1) {
+    total.splice(indexToRemove, 1);
+    updateBalance();
+  }
 };
 
 //potrzebne ograniczenie, zeby najmniejsza mozliwa wartosc byla rowna 0.01.....
 
 addTransaction.addEventListener("click", function () {
   const li = document.createElement("li");
-  li.innerHTML = `<span>${description.value}</span> <span>${Math.abs(
-    amount.value
-  ).toFixed(2)} </span><span>PLN</span>`;
-  let value = Number(Math.abs(amount.value).toFixed(2));
+  const spanDes = document.createElement("span");
+  spanDes.textContent = description.value.trim();
+  li.appendChild(spanDes);
+  const spanAmnt = document.createElement("span");
+  spanAmnt.textContent = Math.abs(amount.value.trim()).toFixed(2);
+  li.appendChild(spanAmnt);
+  const spanPln = document.createElement("span");
+  spanPln.textContent = " PLN";
+  li.appendChild(spanPln);
+
+  const value = Number(Math.abs(amount.value).toFixed(2));
   if (description.value !== "" && amount.value !== "") {
     const transactionValue = type.value === "income" ? value : -value;
 
@@ -55,45 +72,47 @@ addTransaction.addEventListener("click", function () {
     else li.classList.add("expense");
 
     transactionList.appendChild(li);
+
+    // Edit button
     const buttonEdit = document.createElement("button");
-    buttonEdit.innerHTML = "Edytuj";
+    buttonEdit.textContent = "Edytuj";
     buttonEdit.addEventListener("click", () => {
-      const currentDescription = li
-        .querySelector("span:nth-child(1)")
-        .textContent.trim();
-      const currentAmount = li
-        .querySelector("span:nth-child(2)")
-        .textContent.trim();
+      const currentDescription = spanDes.textContent.trim();
+      const currentAmount = spanAmnt.textContent.trim();
 
       const inputDescription = document.createElement("input");
       inputDescription.type = "text";
-      inputDescription.value = currentDescription;
       inputDescription.placeholder = currentDescription;
 
       const inputAmount = document.createElement("input");
-      inputAmount.type = "text";
-      inputAmount.value = currentAmount;
+      inputAmount.type = "number";
       inputAmount.placeholder = currentAmount;
-      inputAmount.setAttribute("type", "number");
 
-      li.innerHTML = "";
+      li.textContent = "";
       li.appendChild(inputDescription);
       li.appendChild(inputAmount);
 
+      // Making accept and cancell buttons
       const buttonAccept = document.createElement("button");
-      buttonAccept.innerHTML = "Zatwierdź";
+      buttonAccept.textContent = "Zatwierdź";
       li.appendChild(buttonAccept);
-
       const buttonCancel = document.createElement("button");
-      buttonCancel.innerHTML = "Anuluj";
+      buttonCancel.textContent = "Anuluj";
       li.appendChild(buttonCancel);
 
+      const cancelChange = () => {
+        spanDes.textContent = currentDescription;
+        spanAmnt.textContent = currentAmount;
+      };
+
+      // Accept button
       buttonAccept.addEventListener("click", () => {
         const newDescription = inputDescription.value.trim();
-        const newAmount = Math.abs(Number(inputAmount.value.trim()).toFixed(2));
+        const newAmount = Math.abs(Number(inputAmount.value).toFixed(2));
 
-        if (newDescription !== "" && newAmount !== "") {
-          li.innerHTML = `<span>${newDescription}</span> <span>${newAmount} </span><span>PLN</span>`;
+        if (newDescription !== "" && newAmount !== 0) {
+          spanDes.textContent = newDescription;
+          spanAmnt.textContent = newAmount;
 
           const totalId = total.findIndex(
             (obj) => obj.id === transactionObject.id
@@ -105,19 +124,38 @@ addTransaction.addEventListener("click", function () {
               ? newAmount
               : -newAmount;
           }
+        } else if (newDescription === "" && newAmount !== 0) {
+          spanDes.textContent = currentDescription;
+          spanAmnt.textContent = newAmount;
+        } else if (newDescription !== "" && newAmount === 0) {
+          spanDes.textContent = newDescription;
+          spanAmnt.textContent = currentAmount;
         } else {
-          li.innerHTML = `<span>${currentDescription}</span> <span>${currentAmount} </span><span>PLN</span>`;
+          cancelChange();
         }
-
+        buttonAccept.remove();
+        buttonCancel.remove();
+        inputDescription.remove();
+        li.appendChild(spanDes);
+        inputAmount.remove();
+        li.appendChild(spanAmnt);
+        li.appendChild(spanPln);
         li.appendChild(buttonEdit);
         li.appendChild(buttonDel);
 
         updateBalance();
       });
 
+      // Cancel button
       buttonCancel.addEventListener("click", () => {
-        li.innerHTML = `<span>${currentDescription}</span> <span>${currentAmount} </span><span>PLN</span>`;
-
+        cancelChange();
+        buttonAccept.remove();
+        buttonCancel.remove();
+        inputDescription.remove();
+        inputAmount.remove();
+        li.appendChild(spanDes);
+        li.appendChild(spanAmnt);
+        li.appendChild(spanPln);
         li.appendChild(buttonEdit);
         li.appendChild(buttonDel);
       });
@@ -126,7 +164,7 @@ addTransaction.addEventListener("click", function () {
     li.appendChild(buttonEdit);
 
     const buttonDel = document.createElement("button");
-    buttonDel.innerHTML = "Usuń";
+    buttonDel.textContent = "Usuń";
     li.appendChild(buttonDel);
     buttonDel.addEventListener("click", () => {
       li.remove();
@@ -141,9 +179,7 @@ addTransaction.addEventListener("click", function () {
     total.push(transactionObject);
 
     updateBalance();
-  } else if (description.value === "" && amount.value !== "") {
-    description.setAttribute("placeholder", "Musisz wpisac nazwe");
-  } else if (description.value !== "" && amount.value === "") {
-    amount.setAttribute("placeholder", "Musisz wpisac kwote");
+    description.value = "";
+    amount.value = "";
   }
 });

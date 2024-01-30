@@ -16,24 +16,36 @@
   <body>
     <div class="wrapper">
       <div class="main">
-        <div class="stickyTop">
-          <h2>Budżet Domowy</h2>
-          <div class="form-container">
-            <input type="text" id="description" placeholder="Nazwa" required />
-            <input
-              type="number"
-              id="amount"
-              placeholder="Kwota"
-              min="0"
-              required
-            />
+        <!-- onsubmit dodany, poniewaz inaczej przycisk odswieza strone -->
+        <form onsubmit="return false">
+          <div class="stickyTop">
+            <h2>Budżet Domowy</h2>
+            <div class="form-container">
+              <label for="description" id="description-label"
+                >Podaj nazwę:
+              </label>
+              <input
+                type="text"
+                required
+                id="description"
+                placeholder="Nazwa"
+              />
+              <label for="amount" id="amount-label">Podaj kwotę: </label>
+              <input
+                type="number"
+                required
+                id="amount"
+                placeholder="Kwota"
+                min="0.01"
+              />
+            </div>
+            <select id="type">
+              <option value="income">Przychód</option>
+              <option value="expense">Wydatek</option>
+            </select>
+            <button id="addTransaction" type="submit">Dodaj transakcję</button>
           </div>
-          <select id="type">
-            <option value="income">Przychód</option>
-            <option value="expense">Wydatek</option>
-          </select>
-          <button id="addTransaction">Dodaj transakcję</button>
-        </div>
+        </form>
         <ul id="transactionList"></ul>
         <div id="balance" class="stickyBottom"></div>
       </div>
