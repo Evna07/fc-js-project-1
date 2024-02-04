@@ -8,27 +8,41 @@ const type = document.querySelector("#type");
 const balance = document.querySelector("#balance");
 const balanceTotal = document.createElement("span");
 balance.appendChild(balanceTotal);
-
+balanceTotal.textContent = "Bilans wynosi zero";
 const form = document.querySelector("form");
+const formContainer = document.querySelector(".form-container");
+const errorLabel = document.createElement("span");
+errorLabel.classList.add("error-label");
 
 form.addEventListener("submit", (event) => {
   event.preventDefault();
 });
 
+// Error label
+const emptyDescriptionError = () => {
+  if (!description.value.trim()) {
+    errorLabel.textContent = "Nazwa nie może być pusta";
+    description.value = "";
+  } else if (amount.value < 0.01) {
+    errorLabel.textContent = "Kwota nie może być ujemna";
+  }
+  formContainer.appendChild(errorLabel);
+};
+
 // Array to store transactions
 const total = [];
 
-// Updateing total balance
+// Updating total balance
 const updateBalance = () => {
   const sumTotal = total.reduce((acc, val) => acc + val.value, 0);
-  if (sumTotal > 0) {
+  if (Number(sumTotal) > 0) {
     balanceTotal.textContent = `Możesz jeszcze wydać ${sumTotal.toFixed(
       2
     )} złotych`;
     balance.classList.add("positive");
     balance.classList.remove("negative", "zero");
   } else if (sumTotal === 0) {
-    balanceTotal.textContent = `Bilans wynosi zero`;
+    balanceTotal.textContent = "Bilans wynosi zero";
     balance.classList.add("zero");
     balance.classList.remove("positive", "negative");
   } else {
@@ -50,10 +64,14 @@ const removeTransaction = (id) => {
   }
 };
 
-//potrzebne ograniczenie, zeby najmniejsza mozliwa wartosc byla rowna 0.01.....
-
-addTransaction.addEventListener("click", function () {
+// Validation of description field
+const validateInput = () => {
+  if (!description.value.trim() || amount.value < 0.01) {
+    emptyDescriptionError();
+    return false;
+  }
   const li = document.createElement("li");
+  li.classList.add("list-item");
   const spanDes = document.createElement("span");
   spanDes.textContent = description.value.trim();
   li.appendChild(spanDes);
@@ -64,7 +82,8 @@ addTransaction.addEventListener("click", function () {
   spanPln.textContent = " PLN";
   li.appendChild(spanPln);
 
-  const value = Number(Math.abs(amount.value).toFixed(2));
+  const amountVal = Number(amount.value);
+  const value = Number(amountVal.toFixed(2));
   if (description.value !== "" && amount.value !== "") {
     const transactionValue = type.value === "income" ? value : -value;
 
@@ -75,16 +94,19 @@ addTransaction.addEventListener("click", function () {
 
     // Edit button
     const buttonEdit = document.createElement("button");
+    buttonEdit.classList.add("edit-transaction");
     buttonEdit.textContent = "Edytuj";
     buttonEdit.addEventListener("click", () => {
       const currentDescription = spanDes.textContent.trim();
       const currentAmount = spanAmnt.textContent.trim();
 
       const inputDescription = document.createElement("input");
+      inputDescription.classList.add("input-field");
       inputDescription.type = "text";
       inputDescription.placeholder = currentDescription;
 
       const inputAmount = document.createElement("input");
+      inputAmount.classList.add("input-field");
       inputAmount.type = "number";
       inputAmount.placeholder = currentAmount;
 
@@ -94,9 +116,11 @@ addTransaction.addEventListener("click", function () {
 
       // Making accept and cancell buttons
       const buttonAccept = document.createElement("button");
+      buttonAccept.classList.add("accept-transaction");
       buttonAccept.textContent = "Zatwierdź";
       li.appendChild(buttonAccept);
       const buttonCancel = document.createElement("button");
+      buttonCancel.classList.add("cancel-transaction");
       buttonCancel.textContent = "Anuluj";
       li.appendChild(buttonCancel);
 
@@ -109,7 +133,6 @@ addTransaction.addEventListener("click", function () {
       buttonAccept.addEventListener("click", () => {
         const newDescription = inputDescription.value.trim();
         const newAmount = Math.abs(Number(inputAmount.value).toFixed(2));
-
         if (newDescription !== "" && newAmount !== 0) {
           spanDes.textContent = newDescription;
           spanAmnt.textContent = newAmount;
@@ -127,9 +150,17 @@ addTransaction.addEventListener("click", function () {
         } else if (newDescription === "" && newAmount !== 0) {
           spanDes.textContent = currentDescription;
           spanAmnt.textContent = newAmount;
-        } else if (newDescription !== "" && newAmount === 0) {
-          spanDes.textContent = newDescription;
-          spanAmnt.textContent = currentAmount;
+
+          const totalId = total.findIndex(
+            (obj) => obj.id === transactionObject.id
+          );
+
+          if (totalId !== -1) {
+            total[totalId].description = newDescription;
+            total[totalId].value = li.classList.contains("income")
+              ? newAmount
+              : -newAmount;
+          }
         } else {
           cancelChange();
         }
@@ -160,10 +191,10 @@ addTransaction.addEventListener("click", function () {
         li.appendChild(buttonDel);
       });
     });
-
     li.appendChild(buttonEdit);
 
     const buttonDel = document.createElement("button");
+    buttonDel.classList.add("delete-transaction");
     buttonDel.textContent = "Usuń";
     li.appendChild(buttonDel);
     buttonDel.addEventListener("click", () => {
@@ -182,4 +213,9 @@ addTransaction.addEventListener("click", function () {
     description.value = "";
     amount.value = "";
   }
+};
+
+addTransaction.addEventListener("click", () => {
+  errorLabel.remove();
+  validateInput();
 });

@@ -16,22 +16,26 @@
   <body>
     <div class="wrapper">
       <div class="main">
-        <!-- onsubmit dodany, poniewaz inaczej przycisk odswieza strone -->
-        <form onsubmit="return false">
-          <div class="stickyTop">
-            <h2>Budżet Domowy</h2>
+        <div class="sticky-top">
+          <form onsubmit="return false">
+            <h2 class="title">Budżet Domowy</h2>
             <div class="form-container">
-              <label for="description" id="description-label"
+              <label for="description" id="description-label" class="label"
                 >Podaj nazwę:
               </label>
               <input
+                class="input-field"
                 type="text"
                 required
                 id="description"
                 placeholder="Nazwa"
+                minlength="1"
               />
-              <label for="amount" id="amount-label">Podaj kwotę: </label>
+              <label for="amount" id="amount-label" class="label"
+                >Podaj kwotę:
+              </label>
               <input
+                class="input-field"
                 type="number"
                 required
                 id="amount"
@@ -43,11 +47,13 @@
               <option value="income">Przychód</option>
               <option value="expense">Wydatek</option>
             </select>
-            <button id="addTransaction" type="submit">Dodaj transakcję</button>
-          </div>
-        </form>
-        <ul id="transactionList"></ul>
-        <div id="balance" class="stickyBottom"></div>
+            <button id="addTransaction" class="add-transaction" type="submit">
+              Dodaj transakcję
+            </button>
+          </form>
+        </div>
+        <ul id="transactionList" class="transaction-list"></ul>
+        <div id="balance" class="sticky-bottom"></div>
       </div>
     </div>
     <script src="index.js" type="module"></script>
