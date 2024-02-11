@@ -115,9 +115,11 @@
   font-size: 18px;
 }
 
-.balance-summary, .error-label, .transaction-details{
+.balance-summary,
+.error-label,
+.transaction-details {
   margin-top: 15px;
-  margin: 15px 5px 0 5px;
+  margin: 15px 5px;
   overflow: hidden;
 }
 

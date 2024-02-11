@@ -156,7 +156,7 @@ const validateInput = () => {
             : (spanDes.textContent = currentDescription);
 
           newAmount !== 0
-            ? (spanAmnt.textContent = newAmount)
+            ? (spanAmnt.textContent = newAmount.toFixed(2))
             : (spanAmnt.textContent = currentAmount);
 
           const totalId = total.findIndex(
