@@ -7,6 +7,7 @@ const amount = document.querySelector("#amount");
 const type = document.querySelector("#type");
 const balance = document.querySelector("#balance");
 const balanceTotal = document.createElement("span");
+balance.classList.add("balance-summary");
 balance.appendChild(balanceTotal);
 balanceTotal.textContent = "Bilans wynosi zero";
 const form = document.querySelector("form");
@@ -52,7 +53,6 @@ const updateBalance = () => {
     balance.classList.add("negative");
     balance.classList.remove("positive", "zero");
   }
-  console.log(total);
 };
 
 // Deleting transaction
@@ -73,12 +73,15 @@ const validateInput = () => {
   const li = document.createElement("li");
   li.classList.add("list-item");
   const spanDes = document.createElement("span");
+  spanDes.classList.add("transaction-details");
   spanDes.textContent = description.value.trim();
   li.appendChild(spanDes);
   const spanAmnt = document.createElement("span");
+  spanAmnt.classList.add("transaction-details");
   spanAmnt.textContent = Math.abs(amount.value.trim()).toFixed(2);
   li.appendChild(spanAmnt);
   const spanPln = document.createElement("span");
+  spanPln.classList.add("transaction-details");
   spanPln.textContent = " PLN";
   li.appendChild(spanPln);
 
@@ -164,7 +167,7 @@ const validateInput = () => {
             total[totalId].description = spanDes.textContent;
             total[totalId].value = li.classList.contains("income")
               ? Number(spanAmnt.textContent)
-              : -Number(spanAmnt.value);
+              : -Number(spanAmnt.textContent);
           }
         } else {
           alert("Zmień chociaż jedno pole, albo anuluj zmianę.");

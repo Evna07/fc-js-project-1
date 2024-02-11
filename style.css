@@ -3,8 +3,6 @@
   margin: 0;
 }
 
-/* w css do stylowania uzywaj tylko klas, nie stylujemy po znacznikach html lub po id, to jest bardzo zła praktyka i w realnych aplikacjach może prowadzić do poważnych problemów i nadpisywania styli innych elementów */
-
 .wrapper {
   color: #33658a;
   font-family: sans-serif, Arial;
@@ -117,7 +115,7 @@
   font-size: 18px;
 }
 
-span {
+.balance-summary, .error-label, .transaction-details{
   margin-top: 15px;
   margin: 15px 5px 0 5px;
   overflow: hidden;
