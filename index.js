@@ -105,10 +105,24 @@ const validateInput = () => {
       inputDescription.type = "text";
       inputDescription.placeholder = currentDescription;
 
+      // Add "keypress" event listener to inputDescription
+      inputDescription.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+          buttonAccept.click();
+        }
+      });
+
       const inputAmount = document.createElement("input");
       inputAmount.classList.add("input-field");
       inputAmount.type = "number";
       inputAmount.placeholder = currentAmount;
+
+      // Add "keypress" event listener to inputAmount
+      inputAmount.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+          buttonAccept.click();
+        }
+      });
 
       li.textContent = "";
       li.appendChild(inputDescription);
@@ -126,43 +140,35 @@ const validateInput = () => {
 
       const cancelChange = () => {
         spanDes.textContent = currentDescription;
-        spanAmnt.textContent = currentAmount;
+        spanAmnt.textContent = Number(currentAmount);
       };
 
       // Accept button
       buttonAccept.addEventListener("click", () => {
         const newDescription = inputDescription.value.trim();
         const newAmount = Math.abs(Number(inputAmount.value).toFixed(2));
-        if (newDescription !== "" && newAmount !== 0) {
-          spanDes.textContent = newDescription;
-          spanAmnt.textContent = newAmount;
+        if (newDescription !== "" || newAmount !== 0) {
+          newDescription !== ""
+            ? (spanDes.textContent = newDescription)
+            : (spanDes.textContent = currentDescription);
+
+          newAmount !== 0
+            ? (spanAmnt.textContent = newAmount)
+            : (spanAmnt.textContent = currentAmount);
 
           const totalId = total.findIndex(
             (obj) => obj.id === transactionObject.id
           );
 
           if (totalId !== -1) {
-            total[totalId].description = newDescription;
+            total[totalId].description = spanDes.textContent;
             total[totalId].value = li.classList.contains("income")
-              ? newAmount
-              : -newAmount;
-          }
-        } else if (newDescription === "" && newAmount !== 0) {
-          spanDes.textContent = currentDescription;
-          spanAmnt.textContent = newAmount;
-
-          const totalId = total.findIndex(
-            (obj) => obj.id === transactionObject.id
-          );
-
-          if (totalId !== -1) {
-            total[totalId].description = newDescription;
-            total[totalId].value = li.classList.contains("income")
-              ? newAmount
-              : -newAmount;
+              ? Number(spanAmnt.textContent)
+              : -Number(spanAmnt.value);
           }
         } else {
-          cancelChange();
+          alert("Zmień chociaż jedno pole, albo anuluj zmianę.");
+          return;
         }
         buttonAccept.remove();
         buttonCancel.remove();
