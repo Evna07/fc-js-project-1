@@ -19,20 +19,33 @@
 
 .main {
   min-width: 300px;
-  max-width: 400px;
+  max-width: 800px;
   background-color: #eed2cc;
   padding: 10px;
   border-radius: 10px;
   box-shadow: 1px 5px 14px -3px rgba(143, 146, 167, 1);
   box-sizing: content-box;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .title {
-  padding: 10px;
+  margin: 10px;
   text-transform: uppercase;
 }
 
+.inner-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.transaction-section {
+  width: 450px;
+}
+
 .transaction-list {
+  margin: 10px;
   list-style: none;
   padding: 0;
 }
@@ -41,7 +54,13 @@
   display: flex;
   justify-content: space-between;
   text-transform: uppercase;
+  align-items: center;
   padding: auto 5px;
+}
+
+.list-item div {
+  display: flex;
+  gap: 3px;
 }
 
 .income {
@@ -54,9 +73,10 @@
   font-weight: bold;
 }
 
-#balance {
-  margin-top: 10px;
+.balance-summary {
+  margin: 10px;
   font-weight: bold;
+  font-size: 18px;
 }
 
 #balance.positive {
@@ -83,43 +103,37 @@
 .input-field {
   width: calc(100% - 10px);
   padding: 7px;
-  margin: 15px auto;
+  margin: 10px auto;
   border: none;
   border-radius: 5px;
   background-color: #faf2f5;
 }
 
 .input-field:focus {
-  padding: 4px;
+  padding: 6px;
   border: 1px solid #33658a;
   outline: none;
 }
 
-.add-transaction,
-.edit-transaction,
-.accept-transaction,
-.cancel-transaction,
-.delete-transaction {
+.action-button {
   background-color: #f28482;
   color: #fff;
   border: none;
   padding: 8px;
   border-radius: 5px;
   cursor: pointer;
-  margin: 10px 5px;
+  margin: 5px;
 }
 
 .error-label {
   color: #c81d25;
   font-weight: 600;
-  font-size: 18px;
+  font-size: 15px;
 }
 
-.balance-summary,
 .error-label,
 .transaction-details {
-  margin-top: 15px;
-  margin: 15px 5px;
+  margin: 15px 25px;
   overflow: hidden;
 }
 
@@ -128,28 +142,7 @@
   position: sticky;
   top: 0;
   background-color: #eed2cc;
-  padding: 20px;
-  border-bottom: 2px solid #33658a;
-}
-
-.sticky-bottom {
-  position: -webkit-sticky; /* Safari */
-  position: sticky;
-  bottom: 0;
-  background-color: #eed2cc;
-  padding: 20px;
-  border-top: 2px solid #33658a;
-}
-
-select {
-  border: none;
-  border-radius: 3px;
-  background-color: #faf2f5;
-  padding: 6px;
-}
-
-select:focus {
+  padding: 15px;
   border: 1px solid #33658a;
-  outline: none;
-  padding: 5px;
+  height: 220px;
 }
