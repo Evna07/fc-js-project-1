@@ -47,14 +47,16 @@
               <li class="list-item">
                 <span>test</span>
                 <div>
-                  <button class="action-button">Edytuj</button>
+                  <button class="action-button" id="editBtn">Edytuj</button>
                   <button class="action-button">Usuń</button>
                 </div>
               </li>
             </ul>
 
-            <div>
-              <span id="incomesTotal">Suma przychodów: 0 PLN</span>
+            <div class="sticky-bottom">
+              <span id="incomesTotal" class="summary"
+                >Suma przychodów: 0 PLN</span
+              >
             </div>
           </div>
           <div class="transaction-section">
@@ -96,8 +98,10 @@
                 </div>
               </li>
             </ul>
-            <div>
-              <span id="expensesTotal">Suma wydatków: 0 PLN</span>
+            <div class="sticky-bottom">
+              <span id="expensesTotal" class="summary"
+                >Suma wydatków: 0 PLN</span
+              >
             </div>
           </div>
         </div>

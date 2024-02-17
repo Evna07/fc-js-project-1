@@ -63,6 +63,7 @@ const addListItem = (transactionDescription, transactionAmount, listId) => {
     listId,
     transactionObject
   );
+
   addEditButton(li, transactionObject, listId);
   addDeleteButton(li, transactionObject, listId);
 };
@@ -152,6 +153,7 @@ const removeTransaction = (transactionObject, listId) => {
     transactionArray.splice(indexToRemove, 1);
     updateBalance();
   }
+  console.log(transactionArray);
 };
 
 // Making delete button
@@ -171,120 +173,128 @@ const addDeleteButton = (li, transactionObject, listId) => {
 const addEditButton = (li, transactionObject, listId) => {
   const buttonEdit = document.createElement("button");
   buttonEdit.classList.add("action-button");
+  buttonEdit.setAttribute("id", "editBtn");
   buttonEdit.textContent = "Edytuj";
   li.appendChild(buttonEdit);
 
   buttonEdit.addEventListener("click", () => {
-    editTransaction();
+    editTransaction(li, transactionObject, listId);
   });
+};
+
+// Making Accept Button
+const addAcceptButton = (tempForm) => {
+  const buttonAccept = document.createElement("button");
+  buttonAccept.classList.add("action-button");
+  buttonAccept.textContent = "Zatwierdź";
+  tempForm.appendChild(buttonAccept);
+};
+
+// Making Cancell Button
+const addCancellButton = (tempForm) => {
+  const buttonCancel = document.createElement("button");
+  buttonCancel.classList.add("action-button");
+  buttonCancel.textContent = "Anuluj";
+  tempForm.appendChild(buttonCancel);
 };
 
 // Editing transaction
-const editTransaction = () => {
-  const currentDescription = spanDes.textContent.trim();
-  const currentAmount = spanAmnt.textContent.trim();
+const editTransaction = (li, transactionObject, listId) => {
+  const oldDescr = transactionObject.description;
+  const oldAmnt = transactionObject.value;
 
-  const inputDescription = document.createElement("input");
-  inputDescription.classList.add("input-field");
-  inputDescription.type = "text";
-  inputDescription.placeholder = currentDescription;
-
-  // Add "keypress" event listener to inputDescription
-  inputDescription.addEventListener("keydown", (event) => {
-    if (event.key === "Enter") {
-      buttonAccept.click();
-    }
-  });
-
-  const inputAmount = document.createElement("input");
-  inputAmount.classList.add("input-field");
-  inputAmount.type = "number";
-  inputAmount.placeholder = currentAmount;
-
-  // Add "keypress" event listener to inputAmount
-  inputAmount.addEventListener("keydown", (event) => {
-    if (event.key === "Enter") {
-      buttonAccept.click();
-    }
-  });
-
+  const tempForm = document.createElement("form");
+  tempForm.classList.add("list-form");
   li.textContent = "";
-  li.appendChild(inputDescription);
-  li.appendChild(inputAmount);
+  li.appendChild(tempForm);
+  const tempDescr = document.createElement("input");
+  tempDescr.classList.add("input-field");
+  tempDescr.value = transactionObject.description;
+  tempForm.appendChild(tempDescr);
+  const tempAmnt = document.createElement("input");
+  tempAmnt.classList.add("input-field");
+  tempAmnt.value = transactionObject.value;
+  tempForm.appendChild(tempAmnt);
+
+  addAcceptButton(tempForm);
+  addCancellButton(tempForm);
+
+  tempForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    acceptTransaction(
+      li,
+      tempDescr,
+      tempAmnt,
+      oldDescr,
+      oldAmnt,
+      tempForm,
+      transactionObject,
+      listId
+    );
+  });
 };
-//! TODO redo rest of the code
 
-//   // Making accept and cancell buttons
-//   const buttonAccept = document.createElement("button");
-//   buttonAccept.classList.add("accept-transaction");
-//   buttonAccept.textContent = "Zatwierdź";
-//   li.appendChild(buttonAccept);
-//   const buttonCancel = document.createElement("button");
-//   buttonCancel.classList.add("cancel-transaction");
-//   buttonCancel.textContent = "Anuluj";
-//   li.appendChild(buttonCancel);
+// Accept changes
+const acceptTransaction = (
+  li,
+  tempDescr,
+  tempAmnt,
+  oldDescr,
+  oldAmnt,
+  tempForm,
+  transactionObject,
+  listId
+) => {
+  // None changes where made variant
+  if (tempDescr.value === oldDescr && Number(tempAmnt.value) === oldAmnt) {
+    tempForm.remove();
+    spanDes.textContent = oldDescr;
+    li.appendChild(spanDes);
+    spanAmnt.textContent = oldAmnt;
+    li.appendChild(spanAmnt);
+    li.appendChild(spanPln);
+  }
+  // Changes made to either description or amount
+  else {
+    tempDescr.value !== oldDescr
+      ? (spanDes.textContent = tempDescr.value)
+      : (spanDes.textContent = oldDescr);
 
-//   const cancelChange = () => {
-//     spanDes.textContent = currentDescription;
-//     spanAmnt.textContent = Number(currentAmount);
-//   };
+    transactionObject.description = spanDes.textContent;
 
-//   // Accept button
-//   buttonAccept.addEventListener("click", () => {
-//     const newDescription = inputDescription.value.trim();
-//     const newAmount = Math.abs(Number(inputAmount.value).toFixed(2));
-//     if (newDescription !== "" || newAmount !== 0) {
-//       newDescription !== ""
-//         ? (spanDes.textContent = newDescription)
-//         : (spanDes.textContent = currentDescription);
+    Number(tempAmnt.value) !== oldAmnt
+      ? (spanAmnt.textContent = Number(tempAmnt.value))
+      : (spanAmnt.textContent = oldAmnt);
 
-//       newAmount !== 0
-//         ? (spanAmnt.textContent = newAmount.toFixed(2))
-//         : (spanAmnt.textContent = currentAmount);
+    transactionObject.value = Number(spanAmnt.textContent);
 
-//       const totalId = total.findIndex((obj) => obj.id === transactionObject.id);
+    console.log(transactionObject);
 
-//       if (totalId !== -1) {
-//         total[totalId].description = spanDes.textContent;
-//         total[totalId].value = li.classList.contains("income")
-//           ? Number(spanAmnt.textContent)
-//           : -Number(spanAmnt.textContent);
-//       }
-//     }
-//     buttonAccept.remove();
-//     buttonCancel.remove();
-//     inputDescription.remove();
-//     li.appendChild(spanDes);
-//     inputAmount.remove();
-//     li.appendChild(spanAmnt);
-//     li.appendChild(spanPln);
-//     li.appendChild(buttonEdit);
-//     li.appendChild(buttonDel);
+    tempForm.remove();
+    li.appendChild(spanDes);
+    li.appendChild(spanAmnt);
+    li.appendChild(spanPln);
 
-//     updateBalance();
-//   });
+    updateBalance(transactionObject);
+  }
 
-//   // Cancel button
-//   buttonCancel.addEventListener("click", () => {
-//     cancelChange();
-//     buttonAccept.remove();
-//     buttonCancel.remove();
-//     inputDescription.remove();
-//     inputAmount.remove();
-//     li.appendChild(spanDes);
-//     li.appendChild(spanAmnt);
-//     li.appendChild(spanPln);
-//     li.appendChild(buttonEdit);
-//     li.appendChild(buttonDel);
-//   });
-// });
-// li.appendChild(buttonEdit);
+  addEditButton(li, transactionObject, listId);
+  addDeleteButton(li, transactionObject, listId);
+};
 
-// rewriting code
+// Cancell changes
+const cancellChanges = () => {
+  tempForm.remove();
+  spanDes.textContent = oldDescr;
+  li.appendChild(spanDes);
+  spanAmnt.textContent = oldAmnt;
+  li.appendChild(spanAmnt);
+  li.appendChild(spanPln);
+};
 
 const runBudget = (transactionDescription, transactionAmount, listId) => {
   errorLabel.remove();
-
   validateInput(transactionDescription, transactionAmount, listId);
 };
 
