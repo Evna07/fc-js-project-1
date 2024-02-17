@@ -19,15 +19,11 @@
 
 .main {
   min-width: 300px;
-  max-width: 800px;
   background-color: #eed2cc;
   padding: 10px;
   border-radius: 10px;
   box-shadow: 1px 5px 14px -3px rgba(143, 146, 167, 1);
   box-sizing: content-box;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
 }
 
 .title {
@@ -47,7 +43,7 @@
 }
 
 .transaction-list {
-  margin: 10px;
+  margin: 5px;
   list-style: none;
   padding: 0;
 }
@@ -61,14 +57,9 @@
   width: 390px;
 }
 
-.list-item div {
-  display: flex;
-  gap: 3px;
-}
-
 .list-form {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
   gap: 10px;
 }
 
@@ -88,15 +79,15 @@
   font-size: 18px;
 }
 
-#balance.positive {
+.balance-summary.positive {
   color: #65a969;
 }
 
-#balance.zero {
+.balance-summary.zero {
   color: #33658a;
 }
 
-#balance.negative {
+.balance-summary.negative {
   color: #e63946;
   text-decoration: underline;
 }
@@ -140,9 +131,7 @@
   font-size: 15px;
 }
 
-.error-label,
 .transaction-details {
-  margin: 15px 10px;
   overflow: hidden;
 }
 
@@ -168,4 +157,5 @@
 
 .summary {
   margin-bottom: 0;
+  font-weight: 600;
 }

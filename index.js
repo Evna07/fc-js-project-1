@@ -4,36 +4,41 @@ const incomeList = document.querySelector("#incomeList");
 const incomeDescription = document.querySelector("#incomeDescription");
 const incomeAmount = document.querySelector("#incomeAmount");
 const formIncome = document.querySelector("#incomeForm");
+const incomesContainer = document.querySelector("#incomesContainer");
 
 const expenseList = document.querySelector("#expenseList");
 const expenseDescription = document.querySelector("#expenseDescription");
 const expenseAmount = document.querySelector("#expenseAmount");
 const formExpense = document.querySelector("#expenseForm");
+const expensesContainer = document.querySelector("#expensesContainer");
 
-// const type = document.querySelector("#type");
 const balance = document.querySelector("#balance");
 balance.textContent = "Bilans wynosi zero";
 
-const formContainer = document.querySelector(".form-container");
 const errorLabel = document.createElement("span");
 errorLabel.classList.add("error-label");
 
 // Error label
-const emptyDescriptionError = (descriptionId, inputId) => {
+const emptyDescriptionError = (descriptionId, inputId, containerId) => {
   if (descriptionId.value.trim() === "" || inputId.value === 0) {
-    errorLabel.textContent = "Żadne pole nie może być puste";
+    errorLabel.textContent = "Pola nie mogą być puste";
     descriptionId.value = "";
   } else if (inputId.value < 0.01) {
     errorLabel.textContent = "Kwota nie może być mniejsza niż 0.01";
   }
-  formContainer.appendChild(errorLabel);
+
+  if (containerId === "incomes") {
+    incomesContainer.appendChild(errorLabel);
+  } else if (containerId === "expenses") {
+    expensesContainer.appendChild(errorLabel);
+  }
 };
 
 // Creating list item
 const addListItem = (transactionDescription, transactionAmount, listId) => {
   const transactionObject = {
     id: nanoid(),
-    description: transactionDescription.value,
+    description: transactionDescription.value.trim(),
     value: Number(transactionAmount.value),
   };
 
@@ -130,9 +135,18 @@ const addTransaction = (
 };
 
 // Input validation
-const validateInput = (transactionDescription, transactionAmount, listId) => {
+const validateInput = (
+  transactionDescription,
+  transactionAmount,
+  listId,
+  containerId
+) => {
   if (!transactionDescription.value.trim() || transactionAmount.value < 0.01) {
-    emptyDescriptionError(transactionDescription, transactionAmount);
+    emptyDescriptionError(
+      transactionDescription,
+      transactionAmount,
+      containerId
+    );
     return false;
   }
   addListItem(transactionDescription, transactionAmount, listId);
@@ -153,7 +167,6 @@ const removeTransaction = (transactionObject, listId) => {
     transactionArray.splice(indexToRemove, 1);
     updateBalance();
   }
-  console.log(transactionArray);
 };
 
 // Making delete button
@@ -182,57 +195,80 @@ const addEditButton = (li, transactionObject, listId) => {
   });
 };
 
-// Making Accept Button
-const addAcceptButton = (tempForm) => {
-  const buttonAccept = document.createElement("button");
-  buttonAccept.classList.add("action-button");
-  buttonAccept.textContent = "Zatwierdź";
-  tempForm.appendChild(buttonAccept);
-};
-
-// Making Cancell Button
-const addCancellButton = (tempForm) => {
-  const buttonCancel = document.createElement("button");
-  buttonCancel.classList.add("action-button");
-  buttonCancel.textContent = "Anuluj";
-  tempForm.appendChild(buttonCancel);
-};
-
 // Editing transaction
 const editTransaction = (li, transactionObject, listId) => {
-  const oldDescr = transactionObject.description;
-  const oldAmnt = transactionObject.value;
-
   const tempForm = document.createElement("form");
   tempForm.classList.add("list-form");
   li.textContent = "";
   li.appendChild(tempForm);
   const tempDescr = document.createElement("input");
   tempDescr.classList.add("input-field");
+  tempDescr.setAttribute("required", "true");
   tempDescr.value = transactionObject.description;
   tempForm.appendChild(tempDescr);
   const tempAmnt = document.createElement("input");
   tempAmnt.classList.add("input-field");
+  tempAmnt.setAttribute("required", "true");
+  tempAmnt.setAttribute("min", "0.01");
+  tempAmnt.setAttribute("step", "0.01");
+  tempAmnt.setAttribute("type", "number");
   tempAmnt.value = transactionObject.value;
   tempForm.appendChild(tempAmnt);
 
-  addAcceptButton(tempForm);
-  addCancellButton(tempForm);
+  // Making Accept Button
+  const buttonAccept = document.createElement("button");
+  buttonAccept.classList.add("action-button");
+  buttonAccept.textContent = "Akceptuj";
+  tempForm.appendChild(buttonAccept);
+
+  // Making Cancell Button
+  const buttonCancel = document.createElement("button");
+  buttonCancel.classList.add("action-button");
+  buttonCancel.textContent = "Anuluj";
+  tempForm.appendChild(buttonCancel);
 
   tempForm.addEventListener("submit", (event) => {
     event.preventDefault();
 
-    acceptTransaction(
-      li,
-      tempDescr,
-      tempAmnt,
-      oldDescr,
-      oldAmnt,
-      tempForm,
-      transactionObject,
-      listId
-    );
+    if (event.submitter === buttonAccept) {
+      errorLabel.remove();
+      acceptTransaction(
+        li,
+        tempDescr,
+        tempAmnt,
+        tempForm,
+        transactionObject,
+        listId
+      );
+    } else if (event.submitter === buttonCancel) {
+      cancellChanges(li, tempForm, transactionObject, listId);
+    }
   });
+  console.log(transactionObject);
+  console.log(`incomes: ${incomeTransactions}`);
+  console.log(`expenses: ${expenseTransactions}`);
+};
+
+// Cancell changes
+const cancellChanges = (li, tempForm, transactionObject, listId) => {
+  const spanDes = document.createElement("span");
+  spanDes.classList.add("transaction-details");
+
+  const spanAmnt = document.createElement("span");
+  spanAmnt.classList.add("transaction-details");
+
+  const spanPln = document.createElement("span");
+  spanPln.textContent = " PLN";
+
+  tempForm.remove();
+  spanDes.textContent = transactionObject.description;
+  li.appendChild(spanDes);
+  spanAmnt.textContent = transactionObject.value;
+  li.appendChild(spanAmnt);
+  li.appendChild(spanPln);
+
+  addEditButton(li, transactionObject, listId);
+  addDeleteButton(li, transactionObject, listId);
 };
 
 // Accept changes
@@ -240,70 +276,81 @@ const acceptTransaction = (
   li,
   tempDescr,
   tempAmnt,
-  oldDescr,
-  oldAmnt,
   tempForm,
   transactionObject,
   listId
 ) => {
-  // None changes where made variant
-  if (tempDescr.value === oldDescr && Number(tempAmnt.value) === oldAmnt) {
-    tempForm.remove();
-    spanDes.textContent = oldDescr;
-    li.appendChild(spanDes);
-    spanAmnt.textContent = oldAmnt;
-    li.appendChild(spanAmnt);
-    li.appendChild(spanPln);
+  const oldDescr = transactionObject.description;
+  const oldAmnt = transactionObject.value;
+
+  const spanDes = document.createElement("span");
+  spanDes.classList.add("transaction-details");
+
+  const spanAmnt = document.createElement("span");
+  spanAmnt.classList.add("transaction-details");
+
+  const spanPln = document.createElement("span");
+  spanPln.textContent = " PLN";
+
+  if (!tempDescr.value.trim()) {
+    errorLabel.textContent = "Pola nie mogą być puste";
+    tempDescr.value = "";
+    li.appendChild(errorLabel);
+    return false;
+  } else {
+    if (
+      // None changes where made variant
+      tempDescr.value === oldDescr &&
+      Number(tempAmnt.value) === oldAmnt
+    ) {
+      cancellChanges(li, tempForm, transactionObject);
+    }
+    // Changes made to either description or amount
+    else {
+      tempDescr.value.trim() !== oldDescr
+        ? (spanDes.textContent = tempDescr.value.trim())
+        : (spanDes.textContent = oldDescr);
+
+      transactionObject.description = spanDes.textContent;
+
+      Number(tempAmnt.value) !== oldAmnt
+        ? (spanAmnt.textContent = Number(tempAmnt.value))
+        : (spanAmnt.textContent = oldAmnt);
+
+      transactionObject.value = Number(spanAmnt.textContent);
+
+      console.log(transactionObject);
+
+      tempForm.remove();
+      li.appendChild(spanDes);
+      li.appendChild(spanAmnt);
+      li.appendChild(spanPln);
+
+      updateBalance(transactionObject);
+      addEditButton(li, transactionObject, listId);
+      addDeleteButton(li, transactionObject, listId);
+    }
   }
-  // Changes made to either description or amount
-  else {
-    tempDescr.value !== oldDescr
-      ? (spanDes.textContent = tempDescr.value)
-      : (spanDes.textContent = oldDescr);
-
-    transactionObject.description = spanDes.textContent;
-
-    Number(tempAmnt.value) !== oldAmnt
-      ? (spanAmnt.textContent = Number(tempAmnt.value))
-      : (spanAmnt.textContent = oldAmnt);
-
-    transactionObject.value = Number(spanAmnt.textContent);
-
-    console.log(transactionObject);
-
-    tempForm.remove();
-    li.appendChild(spanDes);
-    li.appendChild(spanAmnt);
-    li.appendChild(spanPln);
-
-    updateBalance(transactionObject);
-  }
-
-  addEditButton(li, transactionObject, listId);
-  addDeleteButton(li, transactionObject, listId);
 };
 
-// Cancell changes
-const cancellChanges = () => {
-  tempForm.remove();
-  spanDes.textContent = oldDescr;
-  li.appendChild(spanDes);
-  spanAmnt.textContent = oldAmnt;
-  li.appendChild(spanAmnt);
-  li.appendChild(spanPln);
-};
-
-const runBudget = (transactionDescription, transactionAmount, listId) => {
+const runBudget = (
+  transactionDescription,
+  transactionAmount,
+  listId,
+  containerId
+) => {
   errorLabel.remove();
-  validateInput(transactionDescription, transactionAmount, listId);
+  validateInput(transactionDescription, transactionAmount, listId, containerId);
 };
 
 formIncome.addEventListener("submit", (event) => {
   event.preventDefault();
-  runBudget(incomeDescription, incomeAmount, incomeList);
+  const containerId = "incomes";
+  runBudget(incomeDescription, incomeAmount, incomeList, containerId);
 });
 
 formExpense.addEventListener("submit", (event) => {
   event.preventDefault();
-  runBudget(expenseDescription, expenseAmount, expenseList);
+  const containerId = "expenses";
+  runBudget(expenseDescription, expenseAmount, expenseList, containerId);
 });
