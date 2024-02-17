@@ -34,6 +34,7 @@
 .inner-container {
   display: flex;
   flex-direction: row;
+  margin-top: 10px;
 }
 
 .transaction-section {
@@ -143,6 +144,7 @@
   padding: 15px;
   border: 1px solid #33658a;
   height: 220px;
+  margin-bottom: -20px;
 }
 
 .sticky-bottom {
