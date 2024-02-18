@@ -85,14 +85,16 @@ const updateBalance = () => {
     balance.classList.add("negative");
     balance.classList.remove("positive", "zero");
   }
-  expensesTotal.textContent = `Suma wydatków:  ${expenseTransactions.reduce(
+  const expensesSum = expenseTransactions.reduce(
     (acc, transactionObject) => acc + transactionObject.value,
     0
-  )} PLN`;
-  incomesTotal.textContent = `Suma przychodów:  ${incomeTransactions.reduce(
+  );
+  const incomesSum = incomeTransactions.reduce(
     (acc, transactionObject) => acc + transactionObject.value,
     0
-  )} PLN`;
+  );
+  expensesTotal.textContent = `Suma wydatków:  ${expensesSum.toFixed(2)} PLN`;
+  incomesTotal.textContent = `Suma przychodów:  ${incomesSum.toFixed(2)} PLN`;
 };
 
 // Adding new transaction into array
