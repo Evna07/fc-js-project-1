@@ -16,7 +16,7 @@
             <div class="sticky-top">
               <h2>Przychody</h2>
               <form id="incomeForm">
-                <div class="form-container" id="incomesContainer">
+                <div class="form-container">
                   <input
                     class="input-field"
                     type="text"
@@ -24,6 +24,8 @@
                     id="incomeDescription"
                     placeholder="Nazwa przychodu"
                     minlength="1"
+                    pattern="^.*\S.*"
+                    title="Wartość nie może składać się tylko ze spacji"
                   />
 
                   <input
@@ -55,7 +57,7 @@
             <div class="sticky-top">
               <h2>Wydatki</h2>
               <form id="expenseForm">
-                <div class="form-container" id="expensesContainer">
+                <div class="form-container">
                   <input
                     class="input-field"
                     type="text"
@@ -63,6 +65,8 @@
                     id="expenseDescription"
                     placeholder="Nazwa wydatku"
                     minlength="1"
+                    pattern="^.*\S.*"
+                    title="Wartość nie może składać się tylko ze spacji"
                   />
 
                   <input

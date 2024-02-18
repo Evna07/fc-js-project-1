@@ -4,35 +4,14 @@ const incomeList = document.querySelector("#incomeList");
 const incomeDescription = document.querySelector("#incomeDescription");
 const incomeAmount = document.querySelector("#incomeAmount");
 const formIncome = document.querySelector("#incomeForm");
-const incomesContainer = document.querySelector("#incomesContainer");
 
 const expenseList = document.querySelector("#expenseList");
 const expenseDescription = document.querySelector("#expenseDescription");
 const expenseAmount = document.querySelector("#expenseAmount");
 const formExpense = document.querySelector("#expenseForm");
-const expensesContainer = document.querySelector("#expensesContainer");
 
 const balance = document.querySelector("#balance");
 balance.textContent = "Bilans wynosi zero";
-
-const errorLabel = document.createElement("span");
-errorLabel.classList.add("error-label");
-
-// Error label
-const emptyDescriptionError = (descriptionId, inputId, containerId) => {
-  if (descriptionId.value.trim() === "" || inputId.value === 0) {
-    errorLabel.textContent = "Pola nie mogą być puste";
-    descriptionId.value = "";
-  } else if (inputId.value < 0.01) {
-    errorLabel.textContent = "Kwota nie może być mniejsza niż 0.01";
-  }
-
-  if (containerId === "incomes") {
-    incomesContainer.appendChild(errorLabel);
-  } else if (containerId === "expenses") {
-    expensesContainer.appendChild(errorLabel);
-  }
-};
 
 // Creating list item
 const addListItem = (transactionDescription, transactionAmount, listId) => {
@@ -134,24 +113,6 @@ const addTransaction = (
   transactionAmount.value = "";
 };
 
-// Input validation
-const validateInput = (
-  transactionDescription,
-  transactionAmount,
-  listId,
-  containerId
-) => {
-  if (!transactionDescription.value.trim() || transactionAmount.value < 0.01) {
-    emptyDescriptionError(
-      transactionDescription,
-      transactionAmount,
-      containerId
-    );
-    return false;
-  }
-  addListItem(transactionDescription, transactionAmount, listId);
-};
-
 // Deleting transaction
 const removeTransaction = (transactionObject, listId) => {
   let transactionArray;
@@ -204,6 +165,11 @@ const editTransaction = (li, transactionObject, listId) => {
   const tempDescr = document.createElement("input");
   tempDescr.classList.add("input-field");
   tempDescr.setAttribute("required", "true");
+  tempDescr.setAttribute("pattern", "^.*\\S.*");
+  tempDescr.setAttribute(
+    "title",
+    "Wartość nie może składać się tylko ze spacji"
+  );
   tempDescr.value = transactionObject.description;
   tempForm.appendChild(tempDescr);
   const tempAmnt = document.createElement("input");
@@ -231,7 +197,6 @@ const editTransaction = (li, transactionObject, listId) => {
     event.preventDefault();
 
     if (event.submitter === buttonAccept) {
-      errorLabel.remove();
       acceptTransaction(
         li,
         tempDescr,
@@ -244,9 +209,6 @@ const editTransaction = (li, transactionObject, listId) => {
       cancellChanges(li, tempForm, transactionObject, listId);
     }
   });
-  console.log(transactionObject);
-  console.log(`incomes: ${incomeTransactions}`);
-  console.log(`expenses: ${expenseTransactions}`);
 };
 
 // Cancell changes
@@ -293,64 +255,46 @@ const acceptTransaction = (
   spanPln.textContent = " PLN";
 
   if (!tempDescr.value.trim()) {
-    errorLabel.textContent = "Pola nie mogą być puste";
     tempDescr.value = "";
-    li.appendChild(errorLabel);
     return false;
   } else {
     if (
-      // None changes where made variant
+      // None changes were made variant
       tempDescr.value === oldDescr &&
       Number(tempAmnt.value) === oldAmnt
     ) {
-      cancellChanges(li, tempForm, transactionObject);
+      cancellChanges(li, tempForm, transactionObject, listId);
     }
     // Changes made to either description or amount
     else {
-      tempDescr.value.trim() !== oldDescr
-        ? (spanDes.textContent = tempDescr.value.trim())
-        : (spanDes.textContent = oldDescr);
+      transactionObject.description = tempDescr.value.trim();
+      transactionObject.value = Number(tempAmnt.value);
 
-      transactionObject.description = spanDes.textContent;
-
-      Number(tempAmnt.value) !== oldAmnt
-        ? (spanAmnt.textContent = Number(tempAmnt.value))
-        : (spanAmnt.textContent = oldAmnt);
-
-      transactionObject.value = Number(spanAmnt.textContent);
-
-      console.log(transactionObject);
+      spanDes.textContent = transactionObject.description;
+      spanAmnt.textContent = Math.abs(transactionObject.value).toFixed(2);
 
       tempForm.remove();
       li.appendChild(spanDes);
       li.appendChild(spanAmnt);
       li.appendChild(spanPln);
 
-      updateBalance(transactionObject);
+      updateBalance();
       addEditButton(li, transactionObject, listId);
       addDeleteButton(li, transactionObject, listId);
     }
   }
 };
 
-const runBudget = (
-  transactionDescription,
-  transactionAmount,
-  listId,
-  containerId
-) => {
-  errorLabel.remove();
-  validateInput(transactionDescription, transactionAmount, listId, containerId);
+const runBudget = (transactionDescription, transactionAmount, listId) => {
+  addListItem(transactionDescription, transactionAmount, listId);
 };
 
 formIncome.addEventListener("submit", (event) => {
   event.preventDefault();
-  const containerId = "incomes";
-  runBudget(incomeDescription, incomeAmount, incomeList, containerId);
+  runBudget(incomeDescription, incomeAmount, incomeList);
 });
 
 formExpense.addEventListener("submit", (event) => {
   event.preventDefault();
-  const containerId = "expenses";
-  runBudget(expenseDescription, expenseAmount, expenseList, containerId);
+  runBudget(expenseDescription, expenseAmount, expenseList);
 });

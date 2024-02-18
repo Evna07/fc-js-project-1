@@ -126,12 +126,6 @@
   margin: 5px;
 }
 
-.error-label {
-  color: #c81d25;
-  font-weight: 600;
-  font-size: 15px;
-}
-
 .transaction-details {
   overflow: hidden;
 }
@@ -144,7 +138,6 @@
   padding: 15px;
   border: 1px solid #33658a;
   height: 220px;
-  margin-bottom: -20px;
 }
 
 .sticky-bottom {
