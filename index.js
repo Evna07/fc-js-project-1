@@ -11,7 +11,7 @@ const expenseAmount = document.querySelector("#expenseAmount");
 const formExpense = document.querySelector("#expenseForm");
 
 const balance = document.querySelector("#balance");
-balance.textContent = "Bilans wynosi zero";
+balance.textContent = "The balance is zero";
 
 // Creating list item
 const addListItem = (transactionDescription, transactionAmount, listId) => {
@@ -71,15 +71,15 @@ const updateBalance = () => {
       0
     );
   if (Number(sumTotal) > 0) {
-    balance.textContent = `Możesz jeszcze wydać ${sumTotal.toFixed(2)} złotych`;
+    balance.textContent = `You can spend ${sumTotal.toFixed(2)} złotych`;
     balance.classList.add("positive");
     balance.classList.remove("negative", "zero");
   } else if (sumTotal === 0) {
-    balance.textContent = "Bilans wynosi zero";
+    balance.textContent = "The balance is zero";
     balance.classList.add("zero");
     balance.classList.remove("positive", "negative");
   } else {
-    balance.textContent = `Bilans jest ujemny. Jesteś na minusie ${-sumTotal.toFixed(
+    balance.textContent = `The balance is negative. You're in the red ${-sumTotal.toFixed(
       2
     )} złotych`;
     balance.classList.add("negative");
@@ -168,10 +168,7 @@ const editTransaction = (li, transactionObject, listId) => {
   tempDescr.classList.add("input-field");
   tempDescr.setAttribute("required", "true");
   tempDescr.setAttribute("pattern", "^.*\\S.*");
-  tempDescr.setAttribute(
-    "title",
-    "Wartość nie może składać się tylko ze spacji"
-  );
+  tempDescr.setAttribute("title", "The name cannot consist of only spaces");
   tempDescr.value = transactionObject.description;
   tempForm.appendChild(tempDescr);
   const tempAmnt = document.createElement("input");
